@@ -73,7 +73,18 @@ input:focus {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
-
+.apply2 {
+    width: 100%;
+    margin-top: 20px;
+    height: 40px;
+    border: none;
+    background: linear-gradient(to right, #0aa72c, #065828);
+    font-size: 1.1rem;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
 .apply:hover {
     background: linear-gradient(to right, #4a00e0, #8e2de2);
 }
