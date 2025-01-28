@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Details</title>
+    <link rel="stylesheet" href="css/all.css">
+    <link rel="stylesheet" href="local.css">
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .details-container {
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+            margin: 20px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .detail-item {
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+
+        .detail-item span {
+            font-weight: bold;
+            color: #2980b9;
+        }
+
+        .loan-calculation {
+            margin-top: 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #16a085;
+        }
+
+        .countdown {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-top: 20px;
+        }
+
+        .countdown span {
+            color: #2ecc71;
+        }
+
+        .footer {
+            font-size: 0.9em;
+            color: grey;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .btn-container {
+            margin-top: 20px;
+        }
+
+        .back-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: #2980b9;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .details-container {
+                padding: 20px;
+                width: 90%;
+            }
+
+            h2 {
+                font-size: 1.8em;
+            }
+
+            .detail-item {
+                font-size: 1em;
+            }
+
+            .loan-calculation {
+                font-size: 1em;
+            }
+
+            .countdown {
+                font-size: 1.3em;
+            }
+
+            .back-btn {
+                padding: 10px 25px;
+                font-size: 0.9em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .details-container {
+                padding: 15px;
+                width: 100%;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+
+            .detail-item {
+                font-size: 0.9em;
+            }
+
+            .loan-calculation {
+                font-size: 0.9em;
+            }
+
+            .countdown {
+                font-size: 1.2em;
+            }
+
+            .back-btn {
+                padding: 8px 20px;
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="details-container">
+        <h2>Detail View</h2>
+        <div id="detail"></div>
+        <div id="loan-info"></div>
+        <div class="countdown" id="countdown"></div>
+
+        <div class="btn-container">
+            <button class="back-btn" onclick="goBack()">Back to Home</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        Developed by - Siba Prasad Gouda
+    </div>
+
+    <script>
+        // Retrieve data from localStorage
+        let selectedData = JSON.parse(localStorage.getItem('selectedData'));
+        let detailContainer = document.getElementById('detail');
+        let loanInfoContainer = document.getElementById('loan-info');
+        let countdownContainer = document.getElementById('countdown');
+
+        if (selectedData) {
+            // Display all details
+            detailContainer.innerHTML = `
+                <p class="detail-item"><span>Name:</span> ${selectedData.name}</p>
+                <p class="detail-item"><span>Designation:</span> ${selectedData.Employee_desingnation}</p>
+                <p class="detail-item"><span>Amount (Identity):</span> ₹${selectedData.Employee_identity}</p>
+                <p class="detail-item"><span>Date:</span> ${selectedData.Employee_Dob}</p>
+                <p class="detail-item"><span>Phone:</span> ${selectedData.Employee_phone}</p>
+                <p class="detail-item"><span>Address:</span> ${selectedData.Employee_address}</p>
+            `;
+
+            // Calculate and display interest and total amount
+            let principalAmount = parseFloat(selectedData.Employee_identity);
+            let monthlyInterestRate = 0.03; // 3% per month
+            let loanDurationInDays = Math.floor((new Date() - new Date(selectedData.Employee_Dob)) / (1000 * 60 * 60 * 24));
+            let loanDurationInMonths = loanDurationInDays / 30;
+            let interestAmount = principalAmount * monthlyInterestRate * loanDurationInMonths;
+            let totalAmountToPay = principalAmount + interestAmount;
+
+            loanInfoContainer.innerHTML = `
+                <div class="loan-calculation">
+                    <p><span>Loan Duration:</span> ${loanDurationInDays} days </p>
+                    <p><span>Interest Money:</span> ₹${interestAmount.toFixed(2)}</p>
+                    <p><span>Total Amount to Pay:</span> ₹${totalAmountToPay.toFixed(2)}</p>
+                </div>
+            `;
+
+            // Live countdown calculation
+            function updateCountdown() {
+                let dob = new Date(selectedData.Employee_Dob);
+                let now = new Date();
+                let timeDifference = now - dob;
+
+                let years = Math.floor(timeDifference / (1000 * 60 * 60 * 24 * 365.25));
+                let months = Math.floor((timeDifference % (1000 * 60 * 60 * 24 * 365.25)) / (1000 * 60 * 60 * 24 * 30.44));
+                let days = Math.floor((timeDifference % (1000 * 60 * 60 * 24 * 30.44)) / (1000 * 60 * 60 * 24));
+
+                countdownContainer.innerHTML = `
+                    <p><span>${years} Years, ${months} Months, ${days} Days</span></p>
+                `;
+            }
+
+            setInterval(updateCountdown, 1000); // Update countdown every second
+        }
+
+        // Go back to home page
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+
+</html>
