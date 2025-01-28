@@ -155,7 +155,7 @@
 
 <body>
     <div class="details-container">
-        <h2>Detail View</h2>
+        <h2>ହିସାବ କାଉଣ୍ଟର</h2>
         <div id="detail"></div>
         <div id="loan-info"></div>
         <div class="countdown" id="countdown"></div>
@@ -197,9 +197,9 @@
 
             loanInfoContainer.innerHTML = `
                 <div class="loan-calculation">
-                    <p><span>Loan Duration:</span> ${loanDurationInDays} days </p>
-                    <p><span>Interest Money:</span> ₹${interestAmount.toFixed(2)}</p>
-                    <p><span>Total Amount to Pay:</span> ₹${totalAmountToPay.toFixed(2)}</p>
+                    <p><span>ମୋଟ ଦିନ:</span> ${loanDurationInDays} days </p>
+                    <p><span>ସୁଧ ଟଙ୍କା:</span> ₹${interestAmount.toFixed(2)}</p>
+                    <p><span> ମୋଟ ଟଙ୍କା ଦିଆଯିବ:</span> ₹${totalAmountToPay.toFixed(2)}</p>
                 </div>
             `;
 
@@ -214,7 +214,7 @@
                 let days = Math.floor((timeDifference % (1000 * 60 * 60 * 24 * 30.44)) / (1000 * 60 * 60 * 24));
 
                 countdownContainer.innerHTML = `
-                    <p><span>${years} Years, ${months} Months, ${days} Days</span></p>
+                    <p><span>${years} ବର୍ଷ, ${months} ମାସ, ${days} ଦିନ</span></p>
                 `;
             }
 
