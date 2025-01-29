@@ -30,7 +30,7 @@
             width: 100%;
             max-width: 600px;
             margin: 20px;
-            text-align: center;
+            text-align:left;
             box-sizing: border-box;
         }
 
@@ -155,13 +155,14 @@
 
 <body>
     <div class="details-container">
-        <h2>ହିସାବ କାଉଣ୍ଟର</h2>
+      <center>  <h2>ହିସାବ କାଉଣ୍ଟର</h2></center>
         <div id="detail"></div>
         <div id="loan-info"></div>
         <div class="countdown" id="countdown"></div>
 
         <div class="btn-container">
-            <button class="back-btn" onclick="goBack()">Back to Home</button>
+         <center><button class="back-btn" onclick="goBack()">Back to Home</button></center>   
+           
         </div>
     </div>
 
@@ -179,27 +180,40 @@
         if (selectedData) {
             // Display all details
             detailContainer.innerHTML = `
-                <p class="detail-item"><span>ନାମ :</span> ${selectedData.name}</p>
-                <p class="detail-item"><span>A/B :</span> ${selectedData.Employee_desingnation}</p>
-                <p class="detail-item"><span>ଟଙ୍କା: </span> ₹${selectedData.Employee_identity}</p>
-                <p class="detail-item"><span>ତାରିଖ: </span> ${selectedData.Employee_Dob}</p>
-                <p class="detail-item"><span>ମୋବାଇଲ୍ ନମ୍ବର୍: </span> ${selectedData.Employee_phone}</p>
-                <p class="detail-item"><span>ଠିକଣା: </span> ${selectedData.Employee_address}</p>
+                <p class="detail-item"><span>ନାମ:</span> ${selectedData.name}</p>
+                <p class="detail-item"><span>ସୁଧ  :</span> ${selectedData.Employee_desingnation}</p>
+                <p class="detail-item"><span>ଟଙ୍କା:</span> ₹${selectedData.Employee_identity}</p>
+                <p class="detail-item"><span>ତାରିଖ:</span> ${selectedData.Employee_Dob}</p>
+                <p class="detail-item"><span>ମୋବାଇଲ୍ ନମ୍ବର୍:</span> ${selectedData.Employee_phone}</p>
+                <p class="detail-item"><span>ଠିକଣା:</span> ${selectedData.Employee_address}</p>
             `;
+
+function mapn(){
+    window.location.href=`window.location.href='https://www.google.com/maps/dir//${selectedData.Employee_address}' `;
+}
 
             // Calculate and display interest and total amount
             let principalAmount = parseFloat(selectedData.Employee_identity);
-            let monthlyInterestRate = 0.03; // 3% per month
+            let monthlyInterestRate = selectedData.Employee_desingnation / 100; // Monthly interest rate as a percentage
             let loanDurationInDays = Math.floor((new Date() - new Date(selectedData.Employee_Dob)) / (1000 * 60 * 60 * 24));
             let loanDurationInMonths = loanDurationInDays / 30;
+
+            // Calculate interest and total amount
             let interestAmount = principalAmount * monthlyInterestRate * loanDurationInMonths;
             let totalAmountToPay = principalAmount + interestAmount;
+
+            // Calculate daily and monthly interest
+            let dailyInterest = (principalAmount * monthlyInterestRate) / 30; // Daily interest based on monthly rate
+            let monthlyInterest = principalAmount * monthlyInterestRate; // Monthly interest
 
             loanInfoContainer.innerHTML = `
                 <div class="loan-calculation">
                     <p><span>ମୋଟ ଦିନ:</span> ${loanDurationInDays} days </p>
+                    <p><span>Daily Interest:</span> ₹${dailyInterest.toFixed(2)}</p>
+
                     <p><span>ସୁଧ ଟଙ୍କା:</span> ₹${interestAmount.toFixed(2)}</p>
-                    <p><span> ମୋଟ ଟଙ୍କା ଦିଆଯିବ:</span> ₹${totalAmountToPay.toFixed(2)}</p>
+                 <br>  <center style="color:crimson"><p><span>ମୋଟ ଟଙ୍କା ଦିଆଯିବ:</span> ₹${totalAmountToPay.toFixed(2)}</p></center> 
+
                 </div>
             `;
 
@@ -214,7 +228,7 @@
                 let days = Math.floor((timeDifference % (1000 * 60 * 60 * 24 * 30.44)) / (1000 * 60 * 60 * 24));
 
                 countdownContainer.innerHTML = `
-                    <p><span>${years} ବର୍ଷ, ${months} ମାସ, ${days} ଦିନ</span></p>
+        <center> <p><span>${years} ବର୍ଷ, ${months} ମାସ, ${days} ଦିନ</span></p> </center>           
                 `;
             }
 
