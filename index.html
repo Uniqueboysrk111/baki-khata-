@@ -18,11 +18,11 @@
         <div class="frombx">
             <div class="box">
                 <input type="text" name="Name" placeholder="ନାମ" id="ename" required>
-                <input type="text" name="des" placeholder="Enter A or B (A. ମୁଁ ଦେଇଛି/B. ମୁ ଆଣିଛି)" required id="edes">
+                <input type="number" name="des" placeholder="intrest rupees" required id="edes">
                 <input type="number" name="identity" placeholder="ଟଙ୍କା (Money)" required id="eid">
                 <input type="text" name="phone" placeholder="ମୋବାଇଲ୍ ନମ୍ବର" required id="enum">
                 <input type="text" name="address" placeholder="ଠିକଣା" required id="eadd">
-                <input type="date" name="dob" required id="edob">
+                <input type="date" name="dob" placeholder="ତାରିଖ" required id="edob">
             </div>
             <button class="apply" id="submit" type="button">Complete</button>
             <center><p style="color:grey; padding:1%;">Developed by - Siba Prasad Gouda</p></center>
@@ -72,7 +72,7 @@
                             <center>
                                 <div class="name">${element.name}</div>
                             </center>
-                            <div class="desingnation">A. ମୁଁ ଦେଇଛି/B. ମୁ ଆଣିଛି: ${element.Employee_desingnation}</div>
+                            <div class="desingnation">rate of : ${element.Employee_desingnation}</div>
                             <div class="empid">ଟଙ୍କା: ${element.Employee_identity}</div>
                             <div class="dob">ତାରିଖ: ${element.Employee_Dob}</div>
                             <div class="phone">ମୋବାଇଲ୍ ନମ୍ବର୍: ${element.Employee_phone}</div>
