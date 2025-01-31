@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/all.css">
+    <link rel="stylesheet" href="local.css">
+</head>
+
+<body>
+    <form action="">
+        <div class="header">
+            <h2>Baki Khata </h2>     
+        </div>
+        
+        <div class="frombx">
+            <div class="box">
+                <input type="text" name="Name" placeholder="name" id="ename" required>
+                <input type="number" name="des" placeholder="intrest rupees" required id="edes">
+                <input type="number" name="identity" placeholder="Loan Amount RS/-" required id="eid">
+                <input type="text" name="phone" placeholder="Number" required id="enum">
+                <input type="text" name="address" placeholder="Address" required id="eadd">
+                <input type="date" name="dob" placeholder="Date" required id="edob">
+            </div>
+            <button class="apply" id="submit" type="button">Complete</button>
+            <center><p style="color:grey; padding:1%;">Developed by - Siba Prasad Gouda</p></center>
+        </div>
+    </form>
+    <h1 id="dest"></h1>
+    <div class="container" id="container"></div>
+
+    <script>
+        let submit = document.getElementById("submit");
+
+        submit.addEventListener("click", function (e) {
+            let Employee_name = e.target.form.Name.value;
+            let Employee_desingnation = e.target.form.des.value;
+            let Employee_identity = e.target.form.identity.value;
+            let Employee_address = e.target.form.address.value;
+            let Employee_phone = e.target.form.phone.value;
+            let Employee_Dob = e.target.form.dob.value;
+
+            let localdata = JSON.parse(localStorage.getItem("database")) ?? [];
+            localdata.push({
+                name: Employee_name,
+                Employee_desingnation: Employee_desingnation,
+                Employee_identity: Employee_identity,
+                Employee_Dob: Employee_Dob,
+                Employee_phone: Employee_phone,
+                Employee_address: Employee_address,
+            });
+
+            let setdata = localStorage.setItem("database", JSON.stringify(localdata));
+            displaydata();
+            location.reload();
+            e.preventDefault();
+        });
+
+        function displaydata() {
+            let localdata = JSON.parse(localStorage.getItem("database")) ?? [];
+            localdata.forEach((element, index) => {
+                let container_div = document.getElementById("container");
+                let created_div = document.createElement("div");
+                created_div.innerHTML = `
+                    <div class="get" id="get">
+                        <div class="fx">
+                            <center>
+                                <div class="title">Loan Records</div>
+                            </center>
+                            <center>
+                                <div class="name">${element.name}</div>
+                            </center>
+                            <div class="desingnation">rate of intrest : ${element.Employee_desingnation}</div>
+                            <div class="empid">Money: ${element.Employee_identity}</div>
+                            <div class="dob">Date: ${element.Employee_Dob}</div>
+                            <div class="phone">Mob: ${element.Employee_phone}</div>
+                            <div class="address">Address: ${element.Employee_address}</div>
+                        </div>
+                        <button class="divbtn" id="delete_icon" onclick="dl(${index})">Remove</button>
+                        <button class="divbtn" id="viewbtn" onclick="view(${index})">View</button>
+                        <a href="tel:+91${element.Employee_phone}"> 
+                            <button class="apply2" id="submit" type="button">Call him/her</button>
+                        </a>    
+                    </div>`;
+                container_div.appendChild(created_div);
+            });
+        }
+
+        function dl(index) {
+            let localdata = JSON.parse(localStorage.getItem("database")) ?? [];
+            localdata.splice(index, 1);
+            localStorage.setItem("database", JSON.stringify(localdata));
+            location.reload();
+        }
+
+        function view(index) {
+            let localdata = JSON.parse(localStorage.getItem("database")) ?? [];
+            localStorage.setItem('selectedData', JSON.stringify(localdata[index]));
+            window.location.href = "view2.html";
+        }
+
+        displaydata();
+    </script>
+</body>
+</html>
