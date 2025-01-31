@@ -4,105 +4,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="css/all.css">
-    <link rel="stylesheet" href="local.css">
+    <title>publication</title>
+    <link rel="stylesheet" href="publish_index.css">
 </head>
 
 <body>
-    <form action="">
-        <div class="header">
-            <h2>ବାକି ଖାତା v2.0 </h2>     
-        </div>
-        
-        <div class="frombx">
-            <div class="box">
-                <input type="text" name="Name" placeholder="ନାମ" id="ename" required>
-                <input type="number" name="des" placeholder=" ମୋଟ ସୁଧହାର (ex: 3ଟଙ୍କା , 4ଟଙ୍କା, 5ଟଙ୍କା) " required id="edes">
-                <input type="number" name="identity" placeholder="ଟଙ୍କା (Money)" required id="eid">
-                <input type="text" name="phone" placeholder="ମୋବାଇଲ୍ ନମ୍ବର" required id="enum">
-                <input type="text" name="address" placeholder="ଠିକଣା" required id="eadd">
-                <input type="date" name="dob" placeholder="ତାରିଖ" required id="edob">
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <a>Baki khata</a>
             </div>
-            <button class="apply" id="submit" type="button">Complete</button>
-            <center><p style="color:grey; padding:1%;">Developed by - Siba Prasad Gouda</p></center>
-        </div>
-    </form>
-    <h1 id="dest"></h1>
-    <div class="container" id="container"></div>
+        </nav>
 
-    <script>
-        let submit = document.getElementById("submit");
+    </header>
+   <center> <h2 class="select">Select Your Langue</h2></center>
 
-        submit.addEventListener("click", function (e) {
-            let Employee_name = e.target.form.Name.value;
-            let Employee_desingnation = e.target.form.des.value;
-            let Employee_identity = e.target.form.identity.value;
-            let Employee_address = e.target.form.address.value;
-            let Employee_phone = e.target.form.phone.value;
-            let Employee_Dob = e.target.form.dob.value;
+<main>
 
-            let localdata = JSON.parse(localStorage.getItem("database")) ?? [];
-            localdata.push({
-                name: Employee_name,
-                Employee_desingnation: Employee_desingnation,
-                Employee_identity: Employee_identity,
-                Employee_Dob: Employee_Dob,
-                Employee_phone: Employee_phone,
-                Employee_address: Employee_address,
-            });
+<div class="img-container" onclick="window.location.href='eng.html'">
+<img src="readings.png" alt="" class="readings">
+ <center><h3>ENGLISH</h3></center>
+</div>
 
-            let setdata = localStorage.setItem("database", JSON.stringify(localdata));
-            displaydata();
-            location.reload();
-            e.preventDefault();
-        });
+<div class="img-container" onclick="window.location.href='odia.html'">
+<img src="readings.png" alt="" class="readings">
+ <center><h3>ଓଡ଼ିଆ</h3></center>
+</div>
 
-        function displaydata() {
-            let localdata = JSON.parse(localStorage.getItem("database")) ?? [];
-            localdata.forEach((element, index) => {
-                let container_div = document.getElementById("container");
-                let created_div = document.createElement("div");
-                created_div.innerHTML = `
-                    <div class="get" id="get">
-                        <div class="fx">
-                            <center>
-                                <div class="title">ମୋ ବାକି ଖାତା</div>
-                            </center>
-                            
-                            <center>
-                                <div class="name">${element.name}</div>
-                            </center>
-                            <div class="desingnation">ମୋଟ ସୁଧହାର: ${element.Employee_desingnation}</div>
-                            <div class="empid">ଟଙ୍କା: ${element.Employee_identity}</div>
-                            <div class="dob">ତାରିଖ: ${element.Employee_Dob}</div>
-                            <div class="phone">ମୋବାଇଲ୍ ନମ୍ବର୍: ${element.Employee_phone}</div>
-                            <div class="address">ଠିକଣା: ${element.Employee_address}</div>
-                        </div>
-                        <button class="divbtn" id="delete_icon" onclick="dl(${index})">Remove</button>
-                        <button class="divbtn" id="viewbtn" onclick="view(${index})">View</button>
-                        <a href="tel:+91${element.Employee_phone}"> 
-                            <button class="apply2" id="submit" type="button">Call him/her</button>
-                        </a>    
-                    </div>`;
-                container_div.appendChild(created_div);
-            });
-        }
+</main>
 
-        function dl(index) {
-            let localdata = JSON.parse(localStorage.getItem("database")) ?? [];
-            localdata.splice(index, 1);
-            localStorage.setItem("database", JSON.stringify(localdata));
-            location.reload();
-        }
+   
 
-        function view(index) {
-            let localdata = JSON.parse(localStorage.getItem("database")) ?? [];
-            localStorage.setItem('selectedData', JSON.stringify(localdata[index]));
-            window.location.href = "view.html";
-        }
-
-        displaydata();
     </script>
+
 </body>
+
 </html>
