@@ -20,7 +20,10 @@ nav {
     text-decoration: none;
   }
   
-
+  .wall{
+    margin-top:20px;
+    
+  }
   .readings{
     width:200px;
     padding:10px;
@@ -52,7 +55,7 @@ transition: all 1s;
         border:none;
         box-sizing:border-box;
         box-shadow:0px 0.5px 7px #9d8f8f;
-      margin-top: 20px;
+      margin-top: 5px;
       padding:20px;
       }
      
@@ -64,13 +67,17 @@ transition: all 1s;
        letter-spacing:1px;
        }
 .select{
-    margin-top:100px;
+    margin-top:20px;
     font-family: sans-serif;
     background:linear-gradient(to right, #0a15de,#3d0fe3);
     -webkit-background-clip: text;
      color:transparent;
      border: none;
 
+}
+
+.fot{
+    margin-top: 100px;
 }
 
        main{
