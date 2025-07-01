@@ -7,7 +7,7 @@ body{
     display: block;
 }
 nav {
-    background:linear-gradient(rgb(219, 36, 4),rgb(158, 3, 24));
+    background:linear-gradient(rgb(85, 15, 216),rgb(30, 33, 228));
     padding: 10px 20px;
     display: flex;
     justify-content:center;;
