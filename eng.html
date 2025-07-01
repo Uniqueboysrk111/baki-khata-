@@ -1,107 +1,296 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="css/all.css">
-    <link rel="stylesheet" href="local.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Baki Khata</title>
+  <link rel="stylesheet" href="css/all.css" />
+  <link rel="stylesheet" href="local.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    .popup {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+    }
+    .popup-content {
+      background: white;
+      max-width: 500px;
+      margin: 5% auto;
+      padding: 20px;
+      border-radius: 10px;
+      position: relative;
+    }
+    .close {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      font-size: 22px;
+      cursor: pointer;
+    }
+    .chat-box {
+      height: 200px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      margin: 15px 0;
+      padding: 10px;
+      background: #f9f9f9;
+    }
+    .input-area {
+      display: flex;
+      gap: 10px;
+    }
+    .input-area input {
+      flex: 1;
+      padding: 8px;
+    }
+    .input-area button {
+      padding: 8px 12px;
+    }
+    
+  </style>
 </head>
-
 <body>
-    <form action="">
-        <div class="header">
-            <h2>Baki Khata </h2>     
-        </div>
-        
-        <div class="frombx">
-            <div class="box">
-                <input type="text" name="Name" placeholder="name" id="ename" required>
-                <input type="number" name="des" placeholder="intrest rupees" required id="edes">
-                <input type="number" name="identity" placeholder="Loan Amount RS/-" required id="eid">
-                <input type="text" name="phone" placeholder="Number" required id="enum">
-                <input type="text" name="address" placeholder="Address" required id="eadd">
-                <input type="date" name="dob" placeholder="Date" required id="edob">
+  <form action="">
+    <div class="header">
+      <h2>Baki Khata</h2>
+    </div>
+    <div class="frombx">
+      <div class="box">
+        <input type="text" name="Name" placeholder="name" id="ename" required />
+        <input type="number" name="des" placeholder="intrest rupees" required id="edes" />
+        <input type="number" name="identity" placeholder="Loan Amount RS/-" required id="eid" />
+        <input type="text" name="phone" placeholder="Number" required id="enum" />
+        <input type="text" name="address" placeholder="Address" required id="eadd" />
+        <input type="date" name="dob" placeholder="Date" required id="edob" />
+      </div>
+      <button class="apply" id="submit" type="button">Complete</button>
+      <center>
+        <p style="color:grey; padding:1%;">Developed by - Siba Prasad Gouda</p>
+      </center>
+    </div>
+  </form>
+
+  <h1 id="dest"></h1>
+  <div class="container" id="container"></div>
+
+  
+  <div id="popup" style="display:none;" class="popup">
+    <div class="popup-content">
+      <span class="close" onclick="closePopup()">×</span>
+      <h3>Total Loan Amount: <span id="totalLoan"></span> ₹</h3>
+      <div class="chat-box" id="chatBox"></div>
+      <div class="input-area">
+        <input  type="text" id="chatInput" placeholder="Enter amount or message" />
+        <button  onclick="markPaid()">Paid</button>
+        <button style="background-color: rgb(184, 20, 53);" onclick="exportSlip()">Export Slip</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let submit = document.getElementById("submit");
+
+    submit.addEventListener("click", function (e) {
+      let Employee_name = e.target.form.Name.value;
+      let Employee_desingnation = e.target.form.des.value;
+      let Employee_identity = e.target.form.identity.value;
+      let Employee_address = e.target.form.address.value;
+      let Employee_phone = e.target.form.phone.value;
+      let Employee_Dob = e.target.form.dob.value;
+
+      let localdata = JSON.parse(localStorage.getItem("database")) ?? [];
+      localdata.push({
+        name: Employee_name,
+        Employee_desingnation: Employee_desingnation,
+        Employee_identity: Employee_identity,
+        Employee_Dob: Employee_Dob,
+        Employee_phone: Employee_phone,
+        Employee_address: Employee_address,
+      });
+
+      localStorage.setItem("database", JSON.stringify(localdata));
+      displaydata();
+      location.reload();
+      e.preventDefault();
+    });
+
+    function displaydata() {
+      let localdata = JSON.parse(localStorage.getItem("database")) ?? [];
+      let container_div = document.getElementById("container");
+      container_div.innerHTML = ""; // Clear container before adding
+
+      localdata.forEach((element, index) => {
+        let created_div = document.createElement("div");
+        created_div.innerHTML = `
+          <div class="get" id="get">
+            <div class="fx">
+              <center><div class="title">Loan Records</div></center>
+              <center><div class="name">${element.name}</div></center>
+              <div class="desingnation">rate of intrest : ${element.Employee_desingnation}</div>
+              <div class="empid">Money: ${element.Employee_identity}</div>
+              <div class="dob">Date: ${element.Employee_Dob}</div>
+              <div class="phone">Mob: ${element.Employee_phone}</div>
+              <div class="address">Address: ${element.Employee_address}</div>
             </div>
-            <button class="apply" id="submit" type="button">Complete</button>
-            <center><p style="color:grey; padding:1%;">Developed by - Siba Prasad Gouda</p></center>
-        </div>
-    </form>
-    <h1 id="dest"></h1>
-    <div class="container" id="container"></div>
+            <button class="divbtn" id="delete_icon" onclick="dl(${index})">Remove</button>
+            <button class="divbtn" id="viewbtn" onclick="view(${index})">View</button>
+            <button class="divbtn" id="managebtn" onclick="manage(${index})">Manage</button>
+          </div>`;
+        container_div.appendChild(created_div);
+      });
+    }
 
-    <script>
-        let submit = document.getElementById("submit");
+    function dl(index) {
+      let localdata = JSON.parse(localStorage.getItem("database")) ?? [];
 
-        submit.addEventListener("click", function (e) {
-            let Employee_name = e.target.form.Name.value;
-            let Employee_desingnation = e.target.form.des.value;
-            let Employee_identity = e.target.form.identity.value;
-            let Employee_address = e.target.form.address.value;
-            let Employee_phone = e.target.form.phone.value;
-            let Employee_Dob = e.target.form.dob.value;
+      // Remove loan record
+      localdata.splice(index, 1);
+      localStorage.setItem("database", JSON.stringify(localdata));
 
-            let localdata = JSON.parse(localStorage.getItem("database")) ?? [];
-            localdata.push({
-                name: Employee_name,
-                Employee_desingnation: Employee_desingnation,
-                Employee_identity: Employee_identity,
-                Employee_Dob: Employee_Dob,
-                Employee_phone: Employee_phone,
-                Employee_address: Employee_address,
-            });
+      // Remove chat data for deleted index
+      localStorage.removeItem(`chat_${index}`);
 
-            let setdata = localStorage.setItem("database", JSON.stringify(localdata));
-            displaydata();
-            location.reload();
-            e.preventDefault();
-        });
+      // Shift chat keys for subsequent items
+      for (let i = index + 1; ; i++) {
+        let nextChat = localStorage.getItem(`chat_${i}`);
+        if (nextChat === null) break;
 
-        function displaydata() {
-            let localdata = JSON.parse(localStorage.getItem("database")) ?? [];
-            localdata.forEach((element, index) => {
-                let container_div = document.getElementById("container");
-                let created_div = document.createElement("div");
-                created_div.innerHTML = `
-                    <div class="get" id="get">
-                        <div class="fx">
-                            <center>
-                                <div class="title">Loan Records</div>
-                            </center>
-                            <center>
-                                <div class="name">${element.name}</div>
-                            </center>
-                            <div class="desingnation">rate of intrest : ${element.Employee_desingnation}</div>
-                            <div class="empid">Money: ${element.Employee_identity}</div>
-                            <div class="dob">Date: ${element.Employee_Dob}</div>
-                            <div class="phone">Mob: ${element.Employee_phone}</div>
-                            <div class="address">Address: ${element.Employee_address}</div>
-                        </div>
-                        <button class="divbtn" id="delete_icon" onclick="dl(${index})">Remove</button>
-                        <button class="divbtn" id="viewbtn" onclick="view(${index})">View</button>
-                        <a href="tel:+91${element.Employee_phone}"> 
-                            <button class="apply2" id="submit" type="button">Call him/her</button>
-                        </a>    
-                    </div>`;
-                container_div.appendChild(created_div);
-            });
+        localStorage.setItem(`chat_${i - 1}`, nextChat);
+        localStorage.removeItem(`chat_${i}`);
+      }
+
+      location.reload();
+    }
+
+    function view(index) {
+      let localdata = JSON.parse(localStorage.getItem("database")) ?? [];
+      localStorage.setItem("selectedData", JSON.stringify(localdata[index]));
+      window.location.href = "view2.html";
+    }
+
+    function manage(index) {
+      let localdata = JSON.parse(localStorage.getItem("database")) ?? [];
+      let person = localdata[index];
+      document.getElementById("totalLoan").innerText = person.Employee_identity;
+
+      let chatHistory = JSON.parse(localStorage.getItem(`chat_${index}`)) ?? [];
+      let chatBox = document.getElementById("chatBox");
+      chatBox.innerHTML = "";
+      chatHistory.forEach((msg) => {
+        let p = document.createElement("p");
+        p.textContent = msg;
+        chatBox.appendChild(p);
+      });
+
+      document.getElementById("popup").style.display = "block";
+      document.getElementById("chatInput").setAttribute("data-index", index);
+    }
+
+    function closePopup() {
+      document.getElementById("popup").style.display = "none";
+    }
+
+    function markPaid() {
+      let index = document.getElementById("chatInput").getAttribute("data-index");
+      let msg = document.getElementById("chatInput").value;
+      if (!msg.trim()) return;
+
+      let amount = parseFloat(msg);
+      if (isNaN(amount)) {
+        alert("Please enter a valid number.");
+        return;
+      }
+
+      let localdata = JSON.parse(localStorage.getItem("database")) ?? [];
+      let person = localdata[index];
+
+      let currentLoan = parseFloat(person.Employee_identity);
+      let newLoan = currentLoan - amount;
+      if (newLoan < 0) newLoan = 0;
+
+      person.Employee_identity = newLoan.toFixed(2);
+      localdata[index] = person;
+      localStorage.setItem("database", JSON.stringify(localdata));
+
+      document.getElementById("totalLoan").innerText = newLoan.toFixed(2);
+
+      let chatHistory = JSON.parse(localStorage.getItem(`chat_${index}`)) ?? [];
+      let now = new Date();
+      let datetimeStr = now.toLocaleString(); 
+
+      chatHistory.push(`Paid: ₹${amount} on ${datetimeStr}`);
+      localStorage.setItem(`chat_${index}`, JSON.stringify(chatHistory));
+
+      let p = document.createElement("p");
+      p.textContent = `Paid: ₹${amount} on ${datetimeStr}`;
+      document.getElementById("chatBox").appendChild(p);
+      document.getElementById("chatInput").value = "";
+    }
+
+    function getTotalPaid(chatArr) {
+      let total = 0;
+      chatArr.forEach((msg) => {
+        if (msg.startsWith("Paid: ₹")) {
+          let amtStr = msg.split(" ")[1]; 
+          let amt = parseFloat(amtStr.replace("₹", ""));
+          if (!isNaN(amt)) total += amt;
         }
+      });
+      return total;
+    }
 
-        function dl(index) {
-            let localdata = JSON.parse(localStorage.getItem("database")) ?? [];
-            localdata.splice(index, 1);
-            localStorage.setItem("database", JSON.stringify(localdata));
-            location.reload();
+    async function exportSlip() {
+      const index = document.getElementById("chatInput").getAttribute("data-index");
+      const localdata = JSON.parse(localStorage.getItem("database")) ?? [];
+      const person = localdata[index];
+      const chats = JSON.parse(localStorage.getItem(`chat_${index}`)) ?? [];
+
+      const originalLoan = parseFloat(person.Employee_identity) + getTotalPaid(chats);
+      const interestRate = parseFloat(person.Employee_desingnation);
+      const dateTaken = new Date(person.Employee_Dob);
+      const today = new Date();
+      const daysPassed = Math.floor((today - dateTaken) / (1000 * 60 * 60 * 24));
+      const interest = (originalLoan * interestRate * daysPassed) / (100 * 365);
+      const totalPayable = originalLoan + interest;
+      const paidTillNow = getTotalPaid(chats);
+      const remaining = totalPayable - paidTillNow;
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      doc.setFontSize(14);
+      doc.text("Loan Payment Slip", 80, 10);
+      doc.setFontSize(11);
+      doc.text(`Name: ${person.name}`, 10, 20);
+      doc.text(`Phone: ${person.Employee_phone}`, 10, 28);
+      doc.text(`Address: ${person.Employee_address}`, 10, 36);
+      doc.text(`Loan Taken On: ${dateTaken.toDateString()}`, 10, 44);
+      doc.text(`Original Loan Amount: ₹${originalLoan.toFixed(2)}`, 10, 52);
+      doc.text(`Interest Rate: ${interestRate}%`, 10, 60);
+      doc.text(`Days Passed: ${daysPassed} days`, 10, 68);
+      doc.text(`Interest Accrued: ₹${interest.toFixed(2)}`, 10, 76);
+      doc.text(`Total Amount to Pay: ₹${totalPayable.toFixed(2)}`, 10, 84);
+      doc.text(`Amount Paid Till Now: ₹${paidTillNow.toFixed(2)}`, 10, 92);
+      doc.text(`Remaining Amount: ₹${remaining.toFixed(2)}`, 10, 100);
+      doc.text("Payment History:", 10, 110);
+
+      let y = 118;
+      chats.forEach((msg, i) => {
+        if (y >= 280) {
+          doc.addPage();
+          y = 20;
         }
+        doc.text(`${i + 1}. ${msg}`, 10, y);
+        y += 8;
+      });
 
-        function view(index) {
-            let localdata = JSON.parse(localStorage.getItem("database")) ?? [];
-            localStorage.setItem('selectedData', JSON.stringify(localdata[index]));
-            window.location.href = "view2.html";
-        }
+      doc.save(`${person.name}_Loan_Slip.pdf`);
+    }
 
-        displaydata();
-    </script>
+    displaydata();
+  </script>
 </body>
 </html>
